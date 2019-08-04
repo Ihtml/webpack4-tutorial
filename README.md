@@ -52,3 +52,16 @@ module.exports = {
 也可以使用`npx webpack —config otherconfig.js`指定用一个配置文件。 
 
 在package.json文件里的script里添加一个命令：`“bundle": "webpack"`,现在运行`npm run bundle`就会执行webpack打包。
+
+打包后命令行会有如下显示
+
+![](https://raw.githubusercontent.com/Ihtml/images/master/img/20190804204944.jpg)
+
+Hash对应本次打包唯一的hash值，Version为这次打包webpack的版本，Time是整体打包耗时，Built打包的时间，Asset打包出来的文件，Size是文件大小，Chunks放每个js的ID，Chunk Names放js对应的名字。
+
+`entry: './src/index.js'`是`entry: {main: './src/index.js'}`的简写
+
+下面警告提示我们没有指定打包的模式，默认按production模式打包，打包后的js都会压缩在一行内，在module.exports里增加一行`mode: 'development'`后，就不会报警告，而且代码不会被压缩。
+
+
+

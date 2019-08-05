@@ -33,6 +33,8 @@ webpack是居于node.js开发的模块打包工具，本质是由node实现的�
 
 两种方式都需要安装webpack-cli，它使得我们可以在命令行里使用webpack命令。
 
+
+
 ## 三、webpack的配置文件
 
 如果想在项目中编写自己的webpack配置文件，需要在根目录下新建webpack.config.js文件。通过module.exports导出配置，提供一个入口文件作为`entry`和打包输出文件`output`,下面的代码将打包后的内容输出到dist目录下，index.js文件内。
@@ -62,6 +64,29 @@ Hash对应本次打包唯一的hash值，Version为这次打包webpack的版本�
 `entry: './src/index.js'`是`entry: {main: './src/index.js'}`的简写
 
 下面警告提示我们没有指定打包的模式，默认按production模式打包，打包后的js都会压缩在一行内，在module.exports里增加一行`mode: 'development'`后，就不会报警告，而且代码不会被压缩。
+
+
+
+## 四、webpack的核心概念
+
+###  [loader](https://webpack.docschina.org/concepts/loaders) 
+
+webpack默认只知道打包js模块，对于非js结尾的样式文件、图片等就不知道怎么打包了，需要另外在配置文件里配置。
+
+在`module.exports`的对象里新增`module`属性的对象，该对象里需要rules属性数组,里面配置打包规则。
+
+```js
+    module: {
+        rules: [{
+            test: /\.(png|jpg|jpeg)$/, 
+            use: ['url-loader?limit=8192']
+        }]
+    }
+```
+
+规则的写法:`test`为一个正则表达式，检测是否是匹配的模块，`use`为使用的**loader**名，loader需要安装才能使用，上面👆配置的含义是：将所有以png、jpg、jpeg结尾小于8kb的图片模块，使用url-loader,打包成base64形式。
+
+**webpack 使用 [loader](https://webpack.docschina.org/concepts/loaders) 来预处理文件。这允许你打包除 JavaScript 之外的任何静态资源。**
 
 
 

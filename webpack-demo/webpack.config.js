@@ -6,8 +6,25 @@ module.exports = {
     module: {
         rules: [{
             test: /\.(png|jpg|jpeg)$/, 
-            use: ['url-loader?limit=8192']
-        }]
+            use: {
+                loader: 'url-loader',
+                options: {
+                    name: '[name]_[hash:5].[ext]',
+                    outputPath: 'images/',
+                    limit: 2048
+                }
+            }
+        },
+        {
+            test: /\.scss$/,
+            use: [
+                'style-loader',
+                'css-loader',
+                'sass-loader',
+                'postcss-loader'
+            ]
+        }
+    ]
     },
     output: {
         filename: 'bundle.js',

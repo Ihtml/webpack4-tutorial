@@ -111,5 +111,47 @@ webpack默认只知道打包js模块，对于非js结尾的样式文件、图片
     }
 ```
 
+#### 打包样式
 
+打包样式文件的时候一般用到不止一个loader，use里就不使用对象了，而是数组。
+
+```
+        {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader']
+        }
+```
+
+`css-loader`将 CSS 转化成 CommonJS 模块,会帮我们分析出几个css文件的关系，最终合并成一段css.
+
+`style-loader`将 JS 字符串生成为 style 节点,在得到css-loader生成的内容后，挂载到页面的head部分.
+
+如果要使用**Less、Scss、Stylus**编写样式,需要再添加对应的loader。比如'sass-loader',将 Sass 编译成 CSS，默认使用 Node Sass.   安装` npm install sass-loader node-sass --save-dev`
+
+```
+        {
+            test: /\.scss$/,
+            use: [
+                'style-loader',
+                'css-loader',
+                'sass-loader'
+            ]
+        }
+```
+
+webpack的配置里，loader的执行是由先后顺序的：**从下到上，从右到左**
+
+如果使用css3的新特性，**为了兼容性需要加前缀**，比如`-webkit-transform: translate(10px, 10px)`
+
+[postcss-loader](https://webpack.docschina.org/loaders/postcss-loader/)可以实现这个功能,安装`npm i -D postcss-loader`还需要安装插件`npm install autoprefixer -D`
+
+需要我们创建一个postcss.config.js文件，在这个文件里做配置。
+
+```
+module.exports = {
+    plugins: [
+        require('autoprefixer')
+    ]
+}
+```
 

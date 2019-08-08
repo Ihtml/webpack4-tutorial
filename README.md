@@ -122,9 +122,9 @@ webpack默认只知道打包js模块，对于非js结尾的样式文件、图片
         }
 ```
 
-`css-loader`将 CSS 转化成 CommonJS 模块,会帮我们分析出几个css文件的关系，最终合并成一段css.
+**css-loader**将 CSS 转化成 CommonJS 模块,会帮我们分析出几个css文件的关系，最终合并成一段css.
 
-`style-loader`将 JS 字符串生成为 style 节点,在得到css-loader生成的内容后，挂载到页面的head部分.
+**style-loader**将 JS 字符串生成为 style 节点,在得到css-loader生成的内容后，挂载到页面的head部分.
 
 如果要使用**Less、Scss、Stylus**编写样式,需要再添加对应的loader。比如'sass-loader',将 Sass 编译成 CSS，默认使用 Node Sass.   安装` npm install sass-loader node-sass --save-dev`
 
@@ -155,3 +155,41 @@ module.exports = {
 }
 ```
 
+css-loader配置
+
+```
+        {
+            test: /\.scss$/,
+            use: [
+                'style-loader',
+                {
+                    loader: 'css-loader',
+                    options: {
+                        importLoaders: 2
+                    }
+                },
+                'sass-loader',
+                'postcss-loader'
+            ]
+        }
+```
+
+**importLoaders**的作用是：如果打包一个index.scss文件里，@import引用了其他other.scss文件，那other.scss在打包的时候可能不会走postcss-loader和sass-loader了，而是直接走css-loader了。importLoaders可以让import进来的样式文件，也走下面的两个配置。
+
+**css module**
+
+如果一个文件内直接通过`import './index.scss'`这种方式引入css文件，会影响到其他文件，相当于样式是全局的。很容易出现样式冲突。css模块化可以让引入的css只在这个模块内有效。
+
+只需要在css-loader里再加一项配置：modules：true
+
+```
+								{
+                    loader: 'css-loader',
+                    options: {
+                        importLoaders: 2,
+                        modules: true
+                    }
+                },
+```
+
+而引入css的方式也变成：**import style from './index.scss'**, 给元素添加类名也变成**style.classname**

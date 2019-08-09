@@ -193,3 +193,17 @@ css-loader配置
 ```
 
 而引入css的方式也变成：**import style from './index.scss'**, 给元素添加类名也变成**style.classname**
+
+**打包字体**
+
+当使用iconfont的时候，需要打包几个字体文件(eot,svg,ttf,woff)
+
+```
+        {
+            test: '/\.(eot|ttf|svg)$/',
+            use: {
+                loader: 'file-loader'
+            }
+        }
+```
+

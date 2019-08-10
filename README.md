@@ -257,5 +257,25 @@ module.exports = {
 可以给它**添加模板文件,**比如在src目录下创建了一个HTML模板文件,可以通过new HtmlWebpackPlugin({
     template: 'src/index.html'})来引用。
 
+#### clean-webpack-plugin(第三方)
+
+重新打包的时候，在打包之前，自动先把dist目录删除
+
+`npm install clean-webpack-plugin -D`
+
+以下为[3.0.0版本](https://stackoverflow.com/questions/56567930/typeerror-cleanwebpackplugin-is-not-a-constructor)的使用方式，
+
+引用：`const {CleanWebpackPlugin} = require('clean-webpack-plugin');`
+
+在plugins数组里添加
+
+```
+new CleanWebpackPlugin({
+		cleanAfterEveryBuildPatterns: ['dist']
+})
+```
+
+
+
 
 

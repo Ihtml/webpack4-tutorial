@@ -209,9 +209,53 @@ css-loader配置
 
 ### [pluguns](https://webpack.docschina.org/plugins/)
 
+**plugin可以在webpack运行到某个时刻的时候，帮助做一些事情**。
+
 #### html-webpack-plugin
+
+会在打包结束后，自动生成一个html文件，并把打包生成的js自动引入到这个HTML文件中。
 
 ```bash
 npm install --save-dev html-webpack-plugin
 ```
+
+```javascript
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var path = require('path');
+
+module.exports = {
+  entry: 'index.js',
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    filename: 'index_bundle.js'
+  },
+  plugins: [new HtmlWebpackPlugin({
+    template: 'src/index.html'
+  })]
+};
+```
+
+将会产生一个包含以下内容的文件 `dist/index.html`：
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>webpack App</title>
+  </head>
+  <body>
+    <script src="index_bundle.js"></script>
+  </body>
+</html>
+```
+
+如果你有多个 webpack 入口点， 他们都会在生成的HTML文件中的 `script` 标签内。
+
+如果你有任何CSS assets 在webpack的输出中（例如， 利用 [MiniCssExtractPlugin](https://webpack.docschina.org/plugins/mini-css-extract-plugin/) 提取CSS）， 那么这些将被包含在HTML head中的`<link>`标签内。
+
+可以给它**添加模板文件,**比如在src目录下创建了一个HTML模板文件,可以通过new HtmlWebpackPlugin({
+    template: 'src/index.html'})来引用。
+
+
 

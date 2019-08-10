@@ -207,3 +207,11 @@ css-loader配置
         }
 ```
 
+### [pluguns](https://webpack.docschina.org/plugins/)
+
+#### html-webpack-plugin
+
+```bash
+npm install --save-dev html-webpack-plugin
+```
+

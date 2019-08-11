@@ -277,5 +277,21 @@ new CleanWebpackPlugin({
 
 
 
+### [Entry与Output的基础配置](https://webpack.docschina.org/configuration/output/)
 
+两个入口打包出两个文件,publicPath用于把打包出的js文件加上地址.
+
+```
+    entry: {
+        main: './src/index.js',
+        sub: './src/index.js'
+    },
+    output: {
+    		publicPath: 'http://cdn.com.cn',
+        filename: '[name].js',
+        path: path.resolve(__dirname, 'dist')
+    }
+```
+
+参考[管理输出](https://webpack.docschina.org/guides/output-management/)
 

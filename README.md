@@ -295,3 +295,13 @@ new CleanWebpackPlugin({
 
 参考[管理输出](https://webpack.docschina.org/guides/output-management/)
 
+### [SourceMap](https://webpack.docschina.org/configuration/devtool/)
+
+希望开发时代码打包出错时，能告诉我们，到底是哪里的代码出了问题。**sourceMap**是一个映射关系，它知道打包出来的js代码对应的原代码的位置。
+
+在module.export里添加：devtool: 'source-map',会在dist目录里生成一个map文件。
+
+这种映射比较耗费性能，因为会精确到第几行第几个字符，而**cheap-inline-source-map**只会告诉第几行出了问题，性能更好。inline代表不会生成map文件，而是以字符串的形式放到打包生成的文件中。而**cheap-module-source-map**还会管第三方模块和loader的代码。而**cheap-module-eval-source-map**,通过eval这种形式，后面跟sourceURL来指向来源的代码表明映射关系，执行效率最高，性能最好。在开发模式下是最佳实践。如果是生产环境，可以使用**cheap-module-source-map**,提示效果更全面。
+
+
+

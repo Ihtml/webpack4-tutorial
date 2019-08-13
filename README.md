@@ -303,5 +303,29 @@ new CleanWebpackPlugin({
 
 这种映射比较耗费性能，因为会精确到第几行第几个字符，而**cheap-inline-source-map**只会告诉第几行出了问题，性能更好。inline代表不会生成map文件，而是以字符串的形式放到打包生成的文件中。而**cheap-module-source-map**还会管第三方模块和loader的代码。而**cheap-module-eval-source-map**,通过eval这种形式，后面跟sourceURL来指向来源的代码表明映射关系，执行效率最高，性能最好。在开发模式下是最佳实践。如果是生产环境，可以使用**cheap-module-source-map**,提示效果更全面。
 
+### [WebpackDevServer](https://webpack.docschina.org/configuration/dev-server/)
 
+希望每次修改代码后能自动编译打包：
+
+1. "bundle": "webpack —watch",在webpack后接'--watch',只要源代码发生变化，webpack就能监听到，并重新打包生成bundle.js文件，但需要手动刷新页面。
+
+2. 使用**webpack-dev-server**
+
+   安装`npm install webpack-dev-server -D`
+
+   只需要添加以下配置,然后在scripts里添加配置`"start": "webpack-dev-server"`
+
+   ```
+   devServer: {
+   	contentBase: './dist'，
+   	open: true,
+   	proxy: {
+         '/api': 'http://localhost:3000'
+  }
+   }
+   ```
+   
+   现在运行`npm run start`，会默认在localhost:8080端口上启动服务，并**自动打开浏览器并访问服务器的地址**。如果代码发生变化，也能自动重新编译打包，并重启服务和**自动刷新浏览器**。以为是http服务器，所以能发ajax请求。
+   
+   [Proxy](https://webpack.docschina.org/configuration/dev-server/#devserver-proxy)请求到 `/api/users` 现在会被代理到请求 `http://localhost:3000/api/users`。
 

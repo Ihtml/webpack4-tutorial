@@ -9,6 +9,9 @@ module.exports = {
         main: './src/index.js',
         sub: './src/index.js'
     },
+    devServer: {
+        contentBase: './dist'
+    },
     module: {
         rules: [{
             test: /\.(png|jpg|jpeg)$/, 

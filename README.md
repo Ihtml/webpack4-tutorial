@@ -321,7 +321,7 @@ new CleanWebpackPlugin({
    	open: true,
    	proxy: {
          '/api': 'http://localhost:3000'
-  }
+    }
    }
    ```
    
@@ -329,3 +329,34 @@ new CleanWebpackPlugin({
    
    [Proxy](https://webpack.docschina.org/configuration/dev-server/#devserver-proxy)请求到 `/api/users` 现在会被代理到请求 `http://localhost:3000/api/users`。
 
+3. 自己创建node服务器
+
+   首先添加一条命令：`"server": "node server.js"`，再在根目录下创建一个server.js文件。下面介绍如何使用express启动node服务器。
+
+   安装express`npm install express -D`,因为要监听webpack文件的变化并自动重新打包，需要借助一个webpack的中间件webpack-dev-middleware，安装`npm install webpack-dev-middleware -D`
+
+   在output里添加`publicPath: '/'`
+
+   编写server.js
+
+   ```js
+   const express = require('express')
+   const webpack = require('webpack')
+   const webpackDevMiddleware = require('webpack-dev-middleware')
+   const config = require('./webpack.config.js')
+   // 编译器，每执行一次都会重新打包代码
+   const complier = webpack(config)
+   
+   const app = express()
+   app.use(webpackDevMiddleware(complier, {
+       publicPath: config.output.publicPath
+   }))
+   
+   app.listen(3000, () => {
+       console.log('server is running')
+   })
+   ```
+
+   现在执行`npm run server`就会在3000端口起node服务，并打包。
+
+   

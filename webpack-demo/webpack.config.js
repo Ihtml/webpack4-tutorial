@@ -10,7 +10,8 @@ module.exports = {
         sub: './src/index.js'
     },
     devServer: {
-        contentBase: './dist'
+        contentBase: './dist',
+        open: true
     },
     module: {
         rules: [{
@@ -55,7 +56,8 @@ module.exports = {
         })
     ],
     output: {
-        publicPath: 'http://cdn.com.cn',
+        // publicPath: 'http://cdn.com.cn',
+        publicPath: '/',
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist')
     }

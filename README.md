@@ -329,7 +329,7 @@ new CleanWebpackPlugin({
    
    [Proxy](https://webpack.docschina.org/configuration/dev-server/#devserver-proxy)请求到 `/api/users` 现在会被代理到请求 `http://localhost:3000/api/users`。
 
-3. 自己创建node服务器
+3. 在node中直接使用webpack
 
    首先添加一条命令：`"server": "node server.js"`，再在根目录下创建一个server.js文件。下面介绍如何使用express启动node服务器。
 
@@ -360,3 +360,46 @@ new CleanWebpackPlugin({
    现在执行`npm run server`就会在3000端口起node服务，并打包。
 
    
+
+### [Hot Module Replacement热模块更新](https://webpack.docschina.org/guides/hot-module-replacement/)
+
+Webpack-dev-server会把打包的目录放到电脑内存里，这样打包更快。
+
+希望改变样式代码后，不要重新刷新页面，只是替换样式代码，实现**热模块更新**。
+
+首先，在dev-server的配置中，增加`hot: true`
+
+```
+    devServer: {
+        contentBase: './dist',
+        open: true,
+        hot: true,
+        hotOnly: true
+    }
+```
+
+`hotOnly: true`的含义是：即使HMR不生效，也不刷新浏览器。
+
+使用插件：
+
+先引入webpack，`const webpack = require('webpack')`
+
+再在plugins配置项里，添加`new webpack.HotModuleReplacementPlugin()`
+
+**更改webpack配置后要重启项目**，热模块更新就生效了。如果只改了css文件，就不会替换js渲染出的内容，而只替换修改了的css的内容，因为css-loader底层帮我们实现了这个功能。
+
+如果只改了js文件一个模块的内容，同样可以不影响其他模块。
+
+```
+if (module.hot) {
+    module.hot.accept('./content', () => {
+        // 如果只是改了content模块的内容，就只让content重新执行
+        // 删除原有content模块，重新生成新的content模块
+        // ...
+    })
+}
+```
+
+Vue-loader,react的babel-preset都内置了HMR这样功能的实现。
+
+[模块热更新实现原理](https://webpack.docschina.org/concepts/hot-module-replacement/)

@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const webpack = require('webpack')
 
 module.exports = {
     mode: 'development',
@@ -11,7 +12,8 @@ module.exports = {
     },
     devServer: {
         contentBase: './dist',
-        open: true
+        open: true,
+        hot: true
     },
     module: {
         rules: [{
@@ -48,12 +50,14 @@ module.exports = {
         }
     ]
     },
-    plugins: [new HtmlWebpackPlugin({
+    plugins: [
+        new HtmlWebpackPlugin({
         template: 'src/index.html'
-    }),
+        }),
         new CleanWebpackPlugin({
             cleanAfterEveryBuildPatterns: ['dist']
-        })
+        }),
+        new webpack.HotModuleReplacementPlugin()
     ],
     output: {
         // publicPath: 'http://cdn.com.cn',

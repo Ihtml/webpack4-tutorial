@@ -403,3 +403,36 @@ if (module.hot) {
 Vue-loader,react的babel-preset都内置了HMR这样功能的实现。
 
 [模块热更新实现原理](https://webpack.docschina.org/concepts/hot-module-replacement/)
+
+### [Babel处理ES6语法](https://babeljs.io/setup#installation)
+
+希望在项目中使用ES6语法，而又要兼顾浏览器的兼容性，可以使用babel把ES6的语法转化成ES5的语法。
+
+安装babel: `npm install --save-dev babel-loader @babel/core @babel/preset-env @babel/polyfill` 
+
+**babel/core**是babel的核心库，能够让babel识别js代码的内容，转化成AST抽象语法树，再编译转化成新的语法。
+
+**@babel/preset-env**包含了所有ES6转ES5的规则。
+
+**@babel/polyfill**把一些低版本浏览器不兼容的对象(Promise)和函数(map)转换成[polyfill](https://babeljs.io/docs/en/babel-polyfill)。
+
+再在module里添加配置：
+
+```
+module: {
+  rules: [
+            {   
+                test: /\.js$/, 
+                exclude: /node_modules/, 
+                loader: "babel-loader",
+                options: {
+                    "presets": [["@babel/preset-env",{
+                        useBuiltIns: 'usage'
+                    }]]
+                }
+            },
+  ]
+}
+```
+
+**useBuiltIns: 'usage'**只会加载代码要使用的polyfill,精简体积。

@@ -69,7 +69,7 @@ Hash对应本次打包唯一的hash值，Version为这次打包webpack的版本�
 
 ## 四、webpack的核心概念
 
-###  [loader](https://webpack.docschina.org/concepts/loaders) 
+###  [1,loader](https://webpack.docschina.org/concepts/loaders) 
 
 webpack默认只知道打包js模块，对于非js结尾的样式文件、图片等就不知道怎么打包了，需要另外在配置文件里配置。
 
@@ -207,7 +207,7 @@ css-loader配置
         }
 ```
 
-### [pluguns](https://webpack.docschina.org/plugins/)
+### [2,pluguns](https://webpack.docschina.org/plugins/)
 
 **plugin可以在webpack运行到某个时刻的时候，帮助做一些事情**。
 
@@ -277,7 +277,7 @@ new CleanWebpackPlugin({
 
 
 
-### [Entry与Output的基础配置](https://webpack.docschina.org/configuration/output/)
+### [3,Entry与Output的基础配置](https://webpack.docschina.org/configuration/output/)
 
 两个入口打包出两个文件,publicPath用于把打包出的js文件加上地址.
 
@@ -295,7 +295,7 @@ new CleanWebpackPlugin({
 
 参考[管理输出](https://webpack.docschina.org/guides/output-management/)
 
-### [SourceMap](https://webpack.docschina.org/configuration/devtool/)
+### [4,SourceMap](https://webpack.docschina.org/configuration/devtool/)
 
 希望开发时代码打包出错时，能告诉我们，到底是哪里的代码出了问题。**sourceMap**是一个映射关系，它知道打包出来的js代码对应的原代码的位置。
 
@@ -303,7 +303,7 @@ new CleanWebpackPlugin({
 
 这种映射比较耗费性能，因为会精确到第几行第几个字符，而**cheap-inline-source-map**只会告诉第几行出了问题，性能更好。inline代表不会生成map文件，而是以字符串的形式放到打包生成的文件中。而**cheap-module-source-map**还会管第三方模块和loader的代码。而**cheap-module-eval-source-map**,通过eval这种形式，后面跟sourceURL来指向来源的代码表明映射关系，执行效率最高，性能最好。在开发模式下是最佳实践。如果是生产环境，可以使用**cheap-module-source-map**,提示效果更全面。
 
-### [WebpackDevServer](https://webpack.docschina.org/configuration/dev-server/)
+### [5,WebpackDevServer](https://webpack.docschina.org/configuration/dev-server/)
 
 希望每次修改代码后能自动编译打包：
 
@@ -361,7 +361,7 @@ new CleanWebpackPlugin({
 
    
 
-### [Hot Module Replacement热模块更新](https://webpack.docschina.org/guides/hot-module-replacement/)
+### [6,Hot Module Replacement热模块更新](https://webpack.docschina.org/guides/hot-module-replacement/)
 
 Webpack-dev-server会把打包的目录放到电脑内存里，这样打包更快。
 
@@ -404,7 +404,7 @@ Vue-loader,react的babel-preset都内置了HMR这样功能的实现。
 
 [模块热更新实现原理](https://webpack.docschina.org/concepts/hot-module-replacement/)
 
-### [Babel处理ES6语法](https://babeljs.io/setup#installation)
+### [7,Babel处理ES6语法](https://babeljs.io/setup#installation)
 
 希望在项目中使用ES6语法，而又要兼顾浏览器的兼容性，可以使用babel把ES6的语法转化成ES5的语法。
 
@@ -414,7 +414,7 @@ Vue-loader,react的babel-preset都内置了HMR这样功能的实现。
 
 **@babel/preset-env**包含了所有ES6转ES5的规则。
 
-**@babel/polyfill**把一些低版本浏览器不兼容的对象(Promise)和函数(map)转换成[polyfill](https://babeljs.io/docs/en/babel-polyfill)。
+**@babel/polyfill**把一些低版本浏览器不兼容的对象(Promise)和函数(map)转换成[polyfill](https://babeljs.io/docs/en/babel-polyfill)，通过全局变量的形式注入。
 
 再在module里添加配置：
 
@@ -448,5 +448,44 @@ module: {
         chrome: "67",
         safari: "11.1",
       },
+```
+
+2，[transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime)
+
+**plugin-transform-runtime**可以把polyfill以闭包的形式注入，不污染全局环境。
+
+`npm install --save-dev @babel/plugin-transform-runtime @babel/runtime @babel/runtime-corejs2` 
+
+在options里添加插件
+
+```
+"plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "absoluteRuntime": false,
+        "corejs": 2,
+        "helpers": true,
+        "regenerator": true,
+        "useESModules": false
+      }
+    ]
+  ]
+```
+
+3，使用.babelrc配置文件，把options里的内容提取到一个单独的文件内
+
+```
+{
+    "presets": [["@babel/preset-env", {
+        targets: {
+            edge: "17",
+            firefox: "60",
+            chrome: "67",
+            safari: "11.1",
+        },
+        useBuiltIns: 'usage'
+    }]]
+}
 ```
 

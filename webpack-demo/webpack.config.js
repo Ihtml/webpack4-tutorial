@@ -13,16 +13,18 @@ module.exports = {
     devServer: {
         contentBase: './dist',
         open: true,
-        hot: true
+        port: 8080,
+        hot: true,
+        hotOnly: true  //即使不支持HMR也不重新刷新浏览器
     },
     module: {
         rules: [
-            {   
-                test: /\.js$/, 
-                exclude: /node_modules/, 
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
                 loader: "babel-loader",
                 options: {
-                    "presets": [["@babel/preset-env",{
+                    "presets": [["@babel/preset-env", {
                         targets: {
                             edge: "17",
                             firefox: "60",

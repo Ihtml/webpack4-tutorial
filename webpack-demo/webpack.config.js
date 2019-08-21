@@ -78,6 +78,10 @@ module.exports = {
         }),
         new webpack.HotModuleReplacementPlugin()
     ],
+    optimization: {
+        // 只打包那些被使用的模块
+        usedExports: true
+    },
     output: {
         // publicPath: 'http://cdn.com.cn',
         publicPath: '/',

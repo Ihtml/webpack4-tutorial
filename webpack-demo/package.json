@@ -4,6 +4,7 @@
   "description": "",
   "private": true,
   "main": "index.js",
+  "sideEffects": ["@babel/poly-fill", "*.css"],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "bundle": "webpack --watch",

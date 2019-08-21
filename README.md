@@ -605,3 +605,21 @@ module.exports = {
 }
 ```
 
+## 五、webpack高级概念
+
+[1,Tree Shaking]()
+
+希望使用什么才引入什么，Tree Shaking只会打包一个模块中要使用的内容，不会引入的东西剔除掉。**Tree Shaking只支持ES module的引入**。因为ES module底层是静态引入的方式而common.js是动态引入的方式。
+
+在module.exports里添加配置：
+
+```
+    optimization: {
+        // 只打包那些被使用的模块
+        usedExports: true
+    },
+```
+
+在package.json里添加：`"sideEffects": false,`,如果有模块虽然不导出内容，但仍需要,比如babel/poly-fill以及css文件, 可以这样设置`"sideEffects": ["@babel/poly-fill", "*.css"],`
+
+注意**Tree Shaking只在production模式下才会生效**，development的模式下做打包时，即使用了Tree Shaking，也不会生效只有提示。production模式下也不用添加以上module.exports里的配置。

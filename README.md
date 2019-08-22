@@ -607,7 +607,7 @@ module.exports = {
 
 ## 五、webpack高级概念
 
-[1,Tree Shaking]()
+### 1,Tree Shaking
 
 希望使用什么才引入什么，Tree Shaking只会打包一个模块中要使用的内容，不会引入的东西剔除掉。**Tree Shaking只支持ES module的引入**。因为ES module底层是静态引入的方式而common.js是动态引入的方式。
 
@@ -623,3 +623,150 @@ module.exports = {
 在package.json里添加：`"sideEffects": false,`,如果有模块虽然不导出内容，但仍需要,比如babel/poly-fill以及css文件, 可以这样设置`"sideEffects": ["@babel/poly-fill", "*.css"],`
 
 注意**Tree Shaking只在production模式下才会生效**，development的模式下做打包时，即使用了Tree Shaking，也不会生效只有提示。production模式下也不用添加以上module.exports里的配置。
+
+### 2,Develoment和Producttion模式的区分打包
+
+Develoment-开发模式下：devserver可以帮我们起一个服务器，集成了HMR特性，修改了代码会实时展示在devserver对应的网页上。
+
+Producttion-线上环境：代码压缩，sourceMap可以简洁
+
+可以写两个配置文件，webpack.dev.js用来写开发环境的配置，webpack.prod.js用来写线上环境的配置
+
+在package.json里添加命令：
+
+```
+"dev": "webpack-dev-server --config webpack.dev.js",
+"build": "webpack-dev-server --config webpack.prod.js",
+```
+
+开发阶段使用：`npm run dev`本地开发，要线上时使用：`npm run build`打包线上版本。
+
+因为开发环境和线上环境的配置有很多相同的部分，可以提取出来成webpack.common.js
+
+```js
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack')
+
+module.exports = {
+    entry: {
+        main: './src/index.js',
+        sub: './src/index.js'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "babel-loader",
+                options: {
+                    "presets": [["@babel/preset-env", {
+                        targets: {
+                            edge: "17",
+                            firefox: "60",
+                            chrome: "67",
+                            safari: "11.1",
+                        },
+                        useBuiltIns: 'usage'
+                    }]]
+                }
+            },
+            {
+                test: /\.(png|jpg|jpeg)$/,
+                use: {
+                    loader: 'url-loader',
+                    options: {
+                        name: '[name]_[hash:5].[ext]',
+                        outputPath: 'images/',
+                        limit: 2048
+                    }
+                }
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 2,
+                            modules: true
+                        }
+                    },
+                    'sass-loader',
+                    'postcss-loader'
+                ]
+            },
+            {
+                test: '/\.(eot|ttf|svg)$/',
+                use: {
+                    loader: 'file-loader'
+                }
+            }
+        ]
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: 'src/index.html'
+        }),
+        new CleanWebpackPlugin({
+            cleanAfterEveryBuildPatterns: ['dist']
+        })
+    ],
+    output: {
+        // publicPath: 'http://cdn.com.cn',
+        publicPath: '/',
+        filename: '[name].js',
+        path: path.resolve(__dirname, 'dist')
+    }
+}
+```
+
+拆分后需要代码进行合并再输出，需要引入第三方模块**webpack-merge**,安装：`npm install webpack-merge -D`
+
+使用：webpack.dev.js
+
+```js
+const webpack = require('webpack')
+const merge = require('webpack-merge')
+const commonConfig = require('./webpack.common.js')
+
+const devConfig = {
+    mode: 'development',
+    devtool: 'cheap-module-eval-source-map',
+    devServer: {
+        contentBase: './dist',
+        open: true,
+        port: 8080,
+        hot: true,
+        hotOnly: true  //即使不支持HMR也不重新刷新浏览器
+    },   
+    plugins: [
+        new webpack.HotModuleReplacementPlugin()
+    ],
+    optimization: {
+        // 只打包那些被使用的模块
+        usedExports: true
+    },
+}
+```
+
+webpack.prod.js
+
+```js
+const merge = require('webpack-merge')
+const commonConfig = require('./webpack.common.js')
+
+const prodConfig = {
+    mode: 'production',
+    devtool: 'cheap-module-source-map',
+}
+
+module.exports = merge(commonConfig, prodConfig)
+```
+
+
+
+
+

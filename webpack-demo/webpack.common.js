@@ -4,18 +4,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack')
 
 module.exports = {
-    mode: 'development',
-    devtool: 'cheap-module-eval-source-map',
     entry: {
         main: './src/index.js',
         sub: './src/index.js'
-    },
-    devServer: {
-        contentBase: './dist',
-        open: true,
-        port: 8080,
-        hot: true,
-        hotOnly: true  //即使不支持HMR也不重新刷新浏览器
     },
     module: {
         rules: [
@@ -75,13 +66,8 @@ module.exports = {
         }),
         new CleanWebpackPlugin({
             cleanAfterEveryBuildPatterns: ['dist']
-        }),
-        new webpack.HotModuleReplacementPlugin()
+        })
     ],
-    optimization: {
-        // 只打包那些被使用的模块
-        usedExports: true
-    },
     output: {
         // publicPath: 'http://cdn.com.cn',
         publicPath: '/',

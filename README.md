@@ -257,7 +257,7 @@ module.exports = {
 可以给它**添加模板文件,**比如在src目录下创建了一个HTML模板文件,可以通过new HtmlWebpackPlugin({
     template: 'src/index.html'})来引用。
 
-#### clean-webpack-plugin(第三方)
+#### [clean-webpack-plugin(第三方)](https://github.com/johnagan/clean-webpack-plugin)
 
 重新打包的时候，在打包之前，自动先把dist目录删除
 
@@ -275,7 +275,7 @@ new CleanWebpackPlugin({
 })
 ```
 
-
+最近升级了，直接`new CleanWebpackPlugin(),`就好，默认是remove的是output.path，不用设置任何参数！
 
 ### [3,Entry与Output的基础配置](https://webpack.docschina.org/configuration/output/)
 
@@ -767,6 +767,8 @@ module.exports = merge(commonConfig, prodConfig)
 ```
 
 
+
+### 3，Code Splitting代码分割
 
 
 

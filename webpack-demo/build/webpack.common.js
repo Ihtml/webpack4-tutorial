@@ -64,14 +64,12 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: 'src/index.html'
         }),
-        new CleanWebpackPlugin({
-            cleanAfterEveryBuildPatterns: ['dist']
-        })
+        new CleanWebpackPlugin()
     ],
     output: {
         // publicPath: 'http://cdn.com.cn',
         publicPath: '/',
         filename: '[name].js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, '../dist')
     }
 }

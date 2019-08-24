@@ -489,6 +489,18 @@ module: {
 }
 ```
 
+4， [babel-plugin-dynamic-import-webpack](https://github.com/airbnb/babel-plugin-dynamic-import-webpack)异步加载的代码做代码分割
+
+安装`npm install --save-dev babel-plugin-dynamic-import-webpack`，
+
+在babelrc文件下添加
+
+```
+"plugins": ["dynamic-import-webpack"]
+```
+
+
+
 ### [8，对React打包](https://babeljs.io/docs/en/babel-preset-react)
 
 react的jsx语法需要编译打包成js才能被浏览器识别
@@ -770,5 +782,19 @@ module.exports = merge(commonConfig, prodConfig)
 
 ### 3，Code Splitting代码分割
 
+写义务代码的时候常常会引入各种第三方库，如果把它们全部打包到bundle.js里，文件会很大，加载时间会很长，而且每次修改业务代码后，要重新打包，用户要重新加载bundle.js。
 
+可以把一些框架或库以及公用的、一般不会修改的代码，单独打包成js文件，业务逻辑代码另外打包，这样用户首次加载后，公用代码会有缓存，如果我们修改了业务代码，就只加载业务代码，请求更快。
+
+webpack4提供了代码分割的插件，只需要添加以下配置，会自动把公用的类库生成一个文件，再把业务逻辑拆分成一个文件。
+
+```
+    optimization: {
+        splitChunks: {
+            chunks: 'all'
+        }
+    },
+```
+
+对于异步加载的代码也可以做代码分割，使用 [babel-plugin-dynamic-import-webpack](https://github.com/airbnb/babel-plugin-dynamic-import-webpack)插件，无需做其他配置，自动分割到新的而文件中。
 

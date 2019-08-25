@@ -11,5 +11,5 @@
         }],
         "@babel/preset-react"
     ],
-    "plugins": ["dynamic-import-webpack"]
+    "plugins": ["@babel/plugin-syntax-dynamic-import"]
 }

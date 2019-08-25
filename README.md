@@ -1,4 +1,5 @@
 # webpack4-tutorial
+
 ## 一、webpack究竟是什么？
 
 webpack是**模块打包工具**，最初只能打包js文件，现在可以打包任何形式的模块文件，比如css,可以使用`const style = require('./index.css')`或者`import style from './index.css'`
@@ -796,5 +797,39 @@ webpack4提供了代码分割的插件，只需要添加以下配置，会自动
     },
 ```
 
-对于异步加载的代码也可以做代码分割，使用 [babel-plugin-dynamic-import-webpack](https://github.com/airbnb/babel-plugin-dynamic-import-webpack)插件，无需做其他配置，自动分割到新的而文件中。
+对于**异步加载**的代码也可以做代码分割，使用 [@babel/plugin-syntax-dynamic-import](https://babeljs.io/docs/en/babel-plugin-syntax-dynamic-import)插件，无需做其他配置，自动分割到新的而文件中。
+
+安装`npm install --save-dev @babel/plugin-syntax-dynamic-import`
+
+在.babelrc文件里添加配置
+
+```
+{
+  "plugins": ["@babel/plugin-syntax-dynamic-import"]
+}
+```
+
+使用：以下配置会将异步加载的jquery库打包生成vendors~jquery.js文件
+
+```
+function getJquery() {
+    return import(/* webpackChunkName:"jquery" */ 'jquery').then(({ default: $}) => {
+        // 引入的jQuery库会被放到$变量里
+        console.log($)
+    })
+}
+```
+
+[SplitChunksPlugin](https://webpack.docschina.org/plugins/split-chunks-plugin/)配置参数
+
+```
+optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendors: false,
+        default: false
+      }
+    }
+  }
+```
 

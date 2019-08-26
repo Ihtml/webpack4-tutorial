@@ -833,3 +833,52 @@ optimization: {
   }
 ```
 
+当splitChunks: {}不配置的时候，会使用下面的默认配置：
+
+```
+splitChunks: {
+      chunks: 'async',
+      minSize: 30000,
+      maxSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '~',
+      name: true,
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          filename: 'vendors',
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        }
+      }
+    }
+```
+
+chunks: 'async'-----表示只对异步代码做分割，如果想对同步代码也做分割, 设置**chunks: 'all'**，vendors里的test配置，会查找引入的库是否在node_modules里，如果是，就会打包到vendors组，打包成以vendors.js形式的文件。
+
+minSize-----表示引入的模块大于多少字节时才会做代码分割，否则不做分割。
+
+maxSize----表示如果引入的模块大于这个大小，会尝试将模块二次拆分成这个大小。
+
+minChunks——表示一个模块至少被引用了几次后才做代码分割。
+
+maxAsyncRequests----表示同时加载的模块数最多是几个，如果大于这个数只会打包前几个,超过后不会再做代码分割。
+
+maxInitialRequests----表示入口文件引入的其他js文件或者库，如果做代码分割最多分割几个。
+
+automaticNameDelimiter----表示打包生成的文件名中间的连接符
+
+cacheGroups——表示把符合组的模块打包到一个文件中去，比如上面👆的配置会把node_modules中的模块打包到一个名为vendors.js的文件中去。
+
+priority----表示优先级，如果有模块符合多个组，会被打包到priority的值高的组中。
+
+reuseExistingChunk----表示一个模块如果已经被打包过了，再打包就忽略这个模块
+
+
+

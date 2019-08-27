@@ -878,7 +878,11 @@ cacheGroups——表示把符合组的模块打包到一个文件中去，比如
 
 priority----表示优先级，如果有模块符合多个组，会被打包到priority的值高的组中。
 
-reuseExistingChunk----表示一个模块如果已经被打包过了，再打包就忽略这个模块
+reuseExistingChunk----表示一个模块如果已经被打包过了，再打包就忽略这个模块。
+
+### 4，Lazy Loading懒加载
+
+
 
 
 

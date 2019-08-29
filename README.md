@@ -809,7 +809,7 @@ webpack4提供了代码分割的插件，只需要添加以下配置，会自动
 }
 ```
 
-使用：以下配置会将异步加载的jquery库打包生成vendors~jquery.js文件
+使用：以下配置会将异步加载的jquery库打包生成vendors~jquery.js文件, es2015规格中的`import()`本身是不支持指定动态导入模块生成的chunk文件的名称的，不过，现在webpack支持使用**注释**的方式给动态导入的模块添加`chunk name`。
 
 ```
 function getJquery() {
@@ -882,7 +882,7 @@ reuseExistingChunk----表示一个模块如果已经被打包过了，再打包�
 
 ### 4，Lazy Loading懒加载
 
-通过import()异步地加载模块，只有需要的时候才会被加载。比如用react写的网页，希望访问首页的时候，只加载首页相关模块的代码，而其他页面模块的代码暂不加载，放到哪个页面的时候才加载哪个页面，就是懒加载。
+通过import()异步地加载模块，只有需要的时候才会被加载。比如用react写的网页，希望访问首页的时候，只加载首页相关模块的代码，而其他页面模块的代码暂不加载，放到哪个页面的时候才加载哪个页面，就是懒加载。可以使用**import()**来实现。
 
 ```js
 function getJquery() {
@@ -895,7 +895,19 @@ function getJquery() {
 
 因为import()返回的是promise类型，为了兼容老版本浏览器，必须使用polyfill,babel新版本内置了polyfill,在.babelr文件`"presets"`里配置`"@babel/preset-react"`,会自动帮我们注入polyfill。
 
+也可以用异步函数的写法：
 
+```js
+async function getJquery() {
+		const {default: $} = await import(/* webpackChunkName:"jquery" */ 'jquery')
+    console.log($)
+		// to do something
+}
+```
+
+### 5，Chunk
+
+webpack打包出的每个文件都是一个chunk
 
 
 

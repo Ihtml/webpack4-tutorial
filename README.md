@@ -860,7 +860,7 @@ splitChunks: {
     }
 ```
 
-chunks: 'async'-----表示只对异步代码做分割，如果想对同步代码也做分割, 设置**chunks: 'all'**，vendors里的test配置，会查找引入的库是否在node_modules里，如果是，就会打包到vendors组，打包成以vendors.js形式的文件。
+chunks: 'async'-----表示只对异步代码做分割，如果想对同步代码也做分割, 设置**chunks: 'all'**，vendors里的test配置，会查找引入的库是否在node_modules里，如果是，就会打包到vendors组，打包成以vendors.js形式的文件。**webpack中，打包出的每个文件都是一个chunk**
 
 minSize-----表示引入的模块大于多少字节时才会做代码分割，否则不做分割。
 
@@ -905,9 +905,11 @@ async function getJquery() {
 }
 ```
 
-### 5，Chunk
+### 5，打包分析
 
-webpack打包出的每个文件都是一个chunk
+如果想要对打包的代码进行一定的分析。https://github.com/webpack/analyse
+
+
 
 
 

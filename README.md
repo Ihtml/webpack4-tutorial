@@ -905,9 +905,17 @@ async function getJquery() {
 }
 ```
 
-### 5，打包分析
+### 5，[打包分析]([https://webpack.docschina.org/guides/code-splitting/#bundle-%E5%88%86%E6%9E%90-bundle-analysis-](https://webpack.docschina.org/guides/code-splitting/#bundle-分析-bundle-analysis-))
 
-如果想要对打包的代码进行一定的分析。https://github.com/webpack/analyse
+如果想要对打包的代码进行一定的分析。
+
+在package.json中添加命令：`webpack --profile --json > stats.json`，把打包过程中的描述，放到stats.json文件中。
+
+然后把生成的json文件上传到https://github.com/webpack/analyse网站上。会生成下图的分析报告。
+
+![](https://raw.githubusercontent.com/Ihtml/images/master/img/20190831210638.jpg)
+
+其他类似的工具还有：[webpack-chart](https://alexkuz.github.io/webpack-chart/)、[webpack-visualizer](https://chrisbateman.github.io/webpack-visualizer/)、[webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer)、[webpack bundle optimize helper](https://webpack.jakoblind.no/optimize)
 
 
 

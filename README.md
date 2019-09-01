@@ -917,6 +917,18 @@ async function getJquery() {
 
 其他类似的工具还有：[webpack-chart](https://alexkuz.github.io/webpack-chart/)、[webpack-visualizer](https://chrisbateman.github.io/webpack-visualizer/)、[webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer)、[webpack bundle optimize helper](https://webpack.jakoblind.no/optimize)
 
+还可以通过Chrome浏览器的 [Coverage工具](https://zhuanlan.zhihu.com/p/26281581)查看代码利用率。
+
+提高性能的方式：尽量把以后才会用到的代码通过异步加载的方式引入，提升首屏。比如首页有登录框，点击登录的时候才显示，那么就可以把登录框的代码写成异步地形式，等页面主要的内容加载完后，空闲时再加载登录框。
+
+```
+document.addEventListener('click', () => {
+    import('./loginBox.js').then(({default: func}) => {
+        func()
+    })
+})
+```
+
 
 
 

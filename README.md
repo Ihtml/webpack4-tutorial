@@ -783,7 +783,7 @@ module.exports = merge(commonConfig, prodConfig)
 
 ### 3，Code Splitting代码分割
 
-写义务代码的时候常常会引入各种第三方库，如果把它们全部打包到bundle.js里，文件会很大，加载时间会很长，而且每次修改业务代码后，要重新打包，用户要重新加载bundle.js。
+写业务代码的时候常常会引入各种第三方库，如果把它们全部打包到bundle.js里，文件会很大，加载时间会很长，而且每次修改业务代码后，要重新打包，用户要重新加载bundle.js。
 
 可以把一些框架或库以及公用的、一般不会修改的代码，单独打包成js文件，业务逻辑代码另外打包，这样用户首次加载后，公用代码会有缓存，如果我们修改了业务代码，就只加载业务代码，请求更快。
 
@@ -929,7 +929,28 @@ document.addEventListener('click', () => {
 })
 ```
 
+### 6, [预取/预加载模块 prefetch/preload module](https://webpack.docschina.org/guides/code-splitting/#预取-预加载模块-prefetch-preload-module-)
 
+webpack v4.6.0+ 添加了预取和预加载的支持。
 
+在声明 import 时，使用下面这些内置指令，可以让 webpack 输出 "resource hint(资源提示)"，来告知浏览器：
 
+- prefetch(预取)：将来某些导航下可能需要的资源
+- preload(预加载)：当前导航下可能需要资源
 
+```
+document.addEventListener('click', () => {
+    import(/* webpackPrefetch: true */ './loginBox.js').then(({default: func}) => {
+        func()
+    })
+})
+```
+
+上面👆的代码会生成 `<link rel="prefetch" href="loginBox.js">` 并追加到页面头部，指示着浏览器在闲置时间预取 `loginBox.js` 文件。
+
+与 prefetch 指令相比，preload 指令有许多不同之处：
+
+- preload chunk 会在父 chunk 加载时，以并行方式开始加载。prefetch chunk 会在父 chunk 加载结束后开始加载。
+- preload chunk 具有中等优先级，并立即下载。prefetch chunk 在浏览器闲置时下载。
+- preload chunk 会在父 chunk 中立即请求，用于当下时刻。prefetch chunk 会用于未来的某个时刻。
+- 浏览器支持程度不同。

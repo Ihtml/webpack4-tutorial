@@ -954,3 +954,6 @@ document.addEventListener('click', () => {
 - preload chunk 具有中等优先级，并立即下载。prefetch chunk 在浏览器闲置时下载。
 - preload chunk 会在父 chunk 中立即请求，用于当下时刻。prefetch chunk 会用于未来的某个时刻。
 - 浏览器支持程度不同。
+
+### 7，[CSS代码分割 MiniCssExtractPlugin](https://webpack.docschina.org/plugins/mini-css-extract-plugin/)
+

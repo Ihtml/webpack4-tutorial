@@ -78,7 +78,8 @@ module.exports = {
     output: {
         // publicPath: 'http://cdn.com.cn',
         publicPath: '/',
-        filename: '[name].js',
+        filename: '[name].js', // 入口文件名
+        chunkFilename: '[name].chunk.js', // 间接引用的模块
         path: path.resolve(__dirname, '../dist')
     }
 }

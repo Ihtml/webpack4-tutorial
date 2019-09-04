@@ -957,3 +957,51 @@ document.addEventListener('click', () => {
 
 ### 7，[CSS代码分割 MiniCssExtractPlugin](https://webpack.docschina.org/plugins/mini-css-extract-plugin/)
 
+webpack打包会把css打包到js文件里，如果想把css单独打包成文件，可以使用**mini-css-extract-plugin**插件。
+
+安装`npm install --save-dev mini-css-extract-plugin`
+
+因为这个插件暂时不支持HMR热更新，所以不推荐在开发环境使用。
+
+修改线上环境的配置webpack.prod.js, 把**style-loader**替换成**MiniCssExtractPlugin.loader**
+
+```js
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const merge = require('webpack-merge')
+const commonConfig = require('./webpack.common.js')
+
+const prodConfig = {
+    mode: 'production',
+    devtool: 'cheap-module-source-map',
+    modules: {
+        rules: [{
+            test: /\.scss$/,
+            use: [
+                'MiniCssExtractPlugin.loader',
+                {
+                    loader: 'css-loader',
+                    options: {
+                        importLoaders: 2,
+                        modules: true
+                    }
+                },
+                'sass-loader',
+                'postcss-loader'
+            ]
+        }, {
+            test: /\.css$/,
+            use:[
+                'MiniCssExtractPlugin.loader',
+                'css-loader',
+                'postcss-loader'
+            ]
+        }],
+        plugins: [
+            new MiniCssExtractPlugin({})
+        ]
+    }
+}
+
+module.exports = merge(commonConfig, prodConfig)
+```
+

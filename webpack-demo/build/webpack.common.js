@@ -37,21 +37,7 @@ module.exports = {
                     }
                 }
             },
-            {
-                test: /\.scss$/,
-                use: [
-                    'style-loader',
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 2,
-                            modules: true
-                        }
-                    },
-                    'sass-loader',
-                    'postcss-loader'
-                ]
-            },
+
             {
                 test: '/\.(eot|ttf|svg)$/',
                 use: {
@@ -67,6 +53,9 @@ module.exports = {
         new CleanWebpackPlugin(),
     ],
     optimization: {
+        // 只打包那些被使用的模块,摇树优化
+        usedExports: true,
+        // 代码分割，公共代码单独打包文件
         splitChunks: {
             chunks: 'all',
             cacheGroups: {

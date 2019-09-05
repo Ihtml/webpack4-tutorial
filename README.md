@@ -955,7 +955,9 @@ document.addEventListener('click', () => {
 - preload chunk 会在父 chunk 中立即请求，用于当下时刻。prefetch chunk 会用于未来的某个时刻。
 - 浏览器支持程度不同。
 
-### 7，[CSS代码分割 MiniCssExtractPlugin](https://webpack.docschina.org/plugins/mini-css-extract-plugin/)
+### 7，[CSS代码分割 MiniCssExtractPlugin](https://webpack.docschina.org/plugins/mini-css-extract-plugin/)及[代码压缩](https://github.com/NMFR/optimize-css-assets-webpack-plugin)
+
+#### CSS代码分割
 
 webpack打包会把css打包到js文件里，如果想把css单独打包成文件，可以使用**mini-css-extract-plugin**插件。
 
@@ -965,8 +967,20 @@ webpack打包会把css打包到js文件里，如果想把css单独打包成文�
 
 修改线上环境的配置webpack.prod.js, 把**style-loader**替换成**MiniCssExtractPlugin.loader**
 
-```js
+#### CSS代码压缩
+
+使用 [optimize-css-assets-webpack-plugin](https://github.com/NMFR/optimize-css-assets-webpack-plugin)插件
+
+安装：`npm install --save-dev optimize-css-assets-webpack-plugin`
+
+自动代码压缩和合并到一行
+
+现在配置文件如下：
+
+```
+const TerserJSPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const merge = require('webpack-merge')
 const commonConfig = require('./webpack.common.js')
 
@@ -996,8 +1010,17 @@ const prodConfig = {
                 'postcss-loader'
             ]
         }],
+        optimization: {
+            minimizer: [
+              new TerserJSPlugin({}), // 压缩js
+              new OptimizeCSSAssetsPlugin({})
+            ]
+          },
         plugins: [
-            new MiniCssExtractPlugin({})
+            new MiniCssExtractPlugin({
+                filename: '[name].css', // 直接引入的css文件
+                chunkFilename: '[name].chunk.css' // 间接引入的css文件
+            })
         ]
     }
 }

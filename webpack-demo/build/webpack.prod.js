@@ -41,7 +41,11 @@ const prodConfig = {
                 filename: '[name].css', // 直接引入的css文件
                 chunkFilename: '[name].chunk.css' // 间接引入的css文件
             })
-        ]
+        ],
+        output: {
+            filename: '[name].[contenthash].js', // 入口文件名
+            chunkFilename: '[name].[contenthash].chunk.js', // 间接引用的模块
+        }          
     }
 }
 

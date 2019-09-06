@@ -1028,3 +1028,17 @@ const prodConfig = {
 module.exports = merge(commonConfig, prodConfig)
 ```
 
+### 8，浏览器缓存Caching
+
+当用户第一次加载了页面后，浏览器会缓存html和js文件，如果下次我们修改了网页代码，但文件名没变，用户下次访问这个页面的时候会读本地缓存，而不是重新加载新的文件。
+
+可以在线上环境的打包代码webpack.prod.js中增加如下配置：
+
+```
+        output: {
+            filename: '[name].[contenthash].js', // 入口文件名
+            chunkFilename: '[name].[contenthash].chunk.js', // 间接引用的模块
+        }    
+```
+
+**contenthash**是根据内容产生的hash值，内容改变了就会重新生成新的hash值。这样如果改动了代码，用户在访问网址的时候就会重新加载已改动的文件。

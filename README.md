@@ -1042,3 +1042,17 @@ module.exports = merge(commonConfig, prodConfig)
 ```
 
 **contenthash**是根据内容产生的hash值，内容改变了就会重新生成新的hash值。这样如果改动了代码，用户在访问网址的时候就会重新加载已改动的文件。
+
+如果使用老版本的webpack，发现代码没做修改也生成不同hash,可以在optimization里添加下面配置：
+
+```
+    optimization: {
+        runtimeChunk: {
+            name: 'runtime'
+        },
+    }
+```
+
+现在业务逻辑和类库的js是单独打包生成文件的，但业务逻辑和库之间也是有关联的，webpack中称这些关联的代码为manifest，打包后既存在业务代码中也存在库代码中，manifest在旧版webpack中每次打包可能会有差异，导致生成不同的hash文件名。
+
+配置了runtimeChunk后，会把manifest的代码抽离出来进runtime文件里去。

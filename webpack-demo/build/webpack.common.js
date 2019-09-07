@@ -53,6 +53,9 @@ module.exports = {
         new CleanWebpackPlugin(),
     ],
     optimization: {
+        runtimeChunk: {
+            name: 'runtime'
+        },
         // 只打包那些被使用的模块,摇树优化
         usedExports: true,
         // 代码分割，公共代码单独打包文件

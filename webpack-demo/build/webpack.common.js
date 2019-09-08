@@ -51,6 +51,11 @@ module.exports = {
             template: 'src/index.html'
         }),
         new CleanWebpackPlugin(),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            _: 'lodash',
+            _join: ['lodash', 'join'] // 使用_join即为 _.join
+        }),
     ],
     optimization: {
         runtimeChunk: {

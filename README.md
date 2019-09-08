@@ -1056,3 +1056,23 @@ module.exports = merge(commonConfig, prodConfig)
 现在业务逻辑和类库的js是单独打包生成文件的，但业务逻辑和库之间也是有关联的，webpack中称这些关联的代码为manifest，打包后既存在业务代码中也存在库代码中，manifest在旧版webpack中每次打包可能会有差异，导致生成不同的hash文件名。
 
 配置了runtimeChunk后，会把manifest的代码抽离出来进runtime文件里去。
+
+### 9，使用 [ProvidePlugin](https://webpack.docschina.org/plugins/provide-plugin)插件来处理像 jQuery 这样的第三方包
+
+webpack是模块化打包，模块里的变量只能在一个模块内被使用，外部访问不到，保证模块与模块间充分解耦。
+
+`webpack` compiler 能够识别遵循 ES2015 模块语法、CommonJS 或 AMD 规范编写的模块。然而，一些 third party(第三方库) 可能会引用一些全局依赖（例如 `jQuery` 中的 `$`）。因此这些 library 也可能会创建一些需要导出的全局变量。
+
+使用 [`ProvidePlugin`](https://webpack.docschina.org/plugins/provide-plugin) 后，能够在 webpack 编译的每个模块中，通过访问一个变量来获取一个 package。如果 webpack 看到模块中用到这个变量，它将在最终 bundle 中引入给定的 package。
+
+在webpack.common.js的插件中，可以添加如下配置：[ProvidePlugin](https://webpack.docschina.org/plugins/provide-plugin/)
+
+```
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery'
+        }),
+    ],
+```
+
+表示如果一个模块中使用了'\$'这个字符串，就会在模块里自动引入jQuery并把jQuery赋值给$

@@ -1085,6 +1085,29 @@ webpack是模块化打包，模块里的变量只能在一个模块内被使用�
 
 `npm install ts-loader typescript --save-dev`
 
-需要在根目录下创建tsconfig.json文件。
+需要在根目录下配置tsconfig.json文件。
 
 如果使用了类库希望也有类型校验，可以安装对应的类型文件，比如@type/react ,安装方式`npm install @type/react --save-dev`
+
+#### 2，WebpackDevServer请求转发
+
+在使用webpack-dev-server的时候，经常需要在本地localhost模拟向发送ajax请求获取数据，但会出现**跨域**问题。
+
+使用[`devServer.proxy`](https://webpack.docschina.org/configuration/dev-server/#devserver-proxy)跨域很方便进行本地接口的调试。
+
+配置：
+
+```
+    devServer: {
+        contentBase: './dist',
+        open: true,
+        port: 8080,
+        hot: true,
+        hotOnly: true,  //即使不支持HMR也不重新刷新浏览器
+        proxy: {
+            '/api/A.json': "http://test.com", // 以api开头的请求会被代理到test.com服务器上
+        }
+    },  
+```
+
+更多配置跨域阅读官方文档。

@@ -1089,7 +1089,7 @@ webpack是模块化打包，模块里的变量只能在一个模块内被使用�
 
 如果使用了类库希望也有类型校验，可以安装对应的类型文件，比如@type/react ,安装方式`npm install @type/react --save-dev`
 
-#### 2，WebpackDevServer请求转发
+### 2，WebpackDevServer请求转发
 
 在使用webpack-dev-server的时候，经常需要在本地localhost模拟向发送ajax请求获取数据，但会出现**跨域**问题。
 
@@ -1104,10 +1104,13 @@ webpack是模块化打包，模块里的变量只能在一个模块内被使用�
         port: 8080,
         hot: true,
         hotOnly: true,  //即使不支持HMR也不重新刷新浏览器
+        historyApiFallback: true, //解决单页应用路由问题
         proxy: {
             '/api/A.json': "http://test.com", // 以api开头的请求会被代理到test.com服务器上
         }
     },  
 ```
+
+在前端使用单页路由时，比如react使用**BrowserRouter**要配置**[historyApiFallback: true](https://webpack.docschina.org/configuration/dev-server/#devserver-historyapifallback)**这样在使用 [HTML5 History API](https://developer.mozilla.org/en-US/docs/Web/API/History) 时，任意的 `404` 响应都可能需要被替代为 `index.html`,就可以匹配前端路由。这只在前端开发阶段有效，上线前需要后配用nginx等工具做同样的配置。
 
 更多配置跨域阅读官方文档。

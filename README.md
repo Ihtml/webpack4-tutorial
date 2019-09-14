@@ -1114,3 +1114,11 @@ webpack是模块化打包，模块里的变量只能在一个模块内被使用�
 在前端使用单页路由时，比如react使用**BrowserRouter**要配置**[historyApiFallback: true](https://webpack.docschina.org/configuration/dev-server/#devserver-historyapifallback)**这样在使用 [HTML5 History API](https://developer.mozilla.org/en-US/docs/Web/API/History) 时，任意的 `404` 响应都可能需要被替代为 `index.html`,就可以匹配前端路由。这只在前端开发阶段有效，上线前需要后配用nginx等工具做同样的配置。
 
 更多配置跨域阅读官方文档。
+
+#### 3，Webpack结合ESlint
+
+安装ESlint, `npm install eslint --save-dev`
+
+生成eslint配置文件：`npx eslint --init`
+
+检查src目录的代码规范：`npx eslint src`

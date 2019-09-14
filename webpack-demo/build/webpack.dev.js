@@ -11,6 +11,7 @@ const devConfig = {
         port: 8080,
         hot: true,
         hotOnly: true,  //即使不支持HMR也不重新刷新浏览器
+        historyApiFallback: true, //解决单页应用路由问题
         proxy: {
             '/api': {
                 target: 'https://www.test.com',

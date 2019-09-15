@@ -1115,10 +1115,14 @@ webpack是模块化打包，模块里的变量只能在一个模块内被使用�
 
 更多配置跨域阅读官方文档。
 
-#### 3，Webpack结合ESlint
+### 3，Webpack结合ESlint
 
 安装ESlint, `npm install eslint --save-dev`
 
 生成eslint配置文件：`npx eslint --init`
 
 检查src目录的代码规范：`npx eslint src`
+
+[ESlint的详细配置](https://cn.eslint.org/docs/user-guide/configuring)
+
+如果使用VScode编辑器，可以安装eslint插件，启用后编辑器会自动把写得不规范的代码标红。

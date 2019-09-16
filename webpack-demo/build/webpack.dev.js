@@ -38,7 +38,23 @@ const devConfig = {
                 'sass-loader',
                 'postcss-loader'
             ]
-        }]
+        },
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: ["babel-loader", "eslint-loader"],
+            options: {
+                "presets": [["@babel/preset-env", {
+                    targets: {
+                        edge: "17",
+                        firefox: "60",
+                        chrome: "67",
+                        safari: "11.1",
+                    },
+                    useBuiltIns: 'usage'
+                }]]
+            }
+        },]
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin()

@@ -1126,3 +1126,43 @@ webpack是模块化打包，模块里的变量只能在一个模块内被使用�
 [ESlint的详细配置](https://cn.eslint.org/docs/user-guide/configuring)
 
 如果使用VScode编辑器，可以安装eslint插件，启用后编辑器会自动把写得不规范的代码标红。
+
+如果在webpack中使用eslint，首先要安装[eslint-loader](https://webpack.docschina.org/loaders/eslint-loader/)插件：`npm install  eslint-loader --save-dev`
+
+再在webpack的配置文件中添加配置：
+
+```
+			{
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: ["babel-loader", "eslint-loader"]
+       }
+```
+
+这样配置处理js代码的时候，先会用eslint检查代码，再使用babel-loader转换。
+
+再在devserver的配置中添加`overlay: true`, 这样就把打包过程中的错误在浏览器上显示出来。
+
+可选项：
+
+```
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "eslint-loader",
+        options: {
+          // eslint options (if necessary)
+          fix: true,  // enable ESLint autofix feature
+          cache: true, // reducing linting time
+        }
+      }
+    ]
+  }
+  // ...
+};
+```
+

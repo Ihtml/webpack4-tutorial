@@ -13,6 +13,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
+                // include: path.resolve(__dirname, '../src'), 只转化src目录下的js文件
                 loader: "babel-loader",
                 options: {
                     "presets": [["@babel/preset-env", {
@@ -59,7 +60,7 @@ module.exports = {
     ],
     optimization: {
         runtimeChunk: {
-            name: 'runtime'
+            name: 'runtime'  // 把manifest的代码抽离出来进runtime文件里去。
         },
         // 只打包那些被使用的模块,摇树优化
         usedExports: true,

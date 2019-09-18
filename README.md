@@ -543,6 +543,13 @@ module.exports = {
     entry: {
         main: './src/index.js'
     },
+    resolve: {
+        extendsions: ['.js', '.jsx']，// 引入模块时先找js结尾的文件，再找jsx结尾的文件
+      	mainFiles: ['index', 'main']， // 引入一个目录时，优先引入index命名的文件，其次main命名的文件
+        alias: {
+            header: path.resolve(__dirname, '../src/header') // 设置别名
+        }
+    },
     devServer: {
         contentBase: './dist',
         open: true,
@@ -551,7 +558,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.jsx?$/, // .js文件和.jsx文件都会使用babel-loader
                 exclude: /node_modules/,
                 loader: "babel-loader",
                 options: {

@@ -1191,3 +1191,58 @@ webpack每个版本更新，内部都会做优化，升级webpack版本能有效
 
 没必要使用的插件就不用，不然就降低打包速度。需要使用的插件也分开发环境和线上环境。官方推荐的插件往往性能更好。
 
+##### 4, 使用DllPlugin提高打包速度
+
+现在打包时，第三方模块每次都要动态从node_modules里取出，并打包到源代码中，会消耗打包事件，而一般项目中引入的第三方模块(比如React，Redux等)是不会变的，可以单独打包生成一个文件，只在第一次打包的时候分析，下次以后打包的时候直接用分析好的代码
+
+新增一个webpack.dll.js文件,添加如下内容
+
+```
+const path = require('path');
+const webpack = require('webpack')
+
+module.exports = {
+    mode: 'production',
+    entry: {
+        vendors: ['react', 'react-dom', 'redux']
+    },
+    output: {
+        filename: '[name].dll.js',
+        path: path.resolve(__dirname, '../dll'),
+        library: '[name]'  // 打包的内容通过全局变量暴露出来
+    },
+    plugins: [
+        new webpack.DllPlugin({
+            name: '[name]', // 对打包生成的内容进行分析
+            path: path.resolve(__dirname, '../dll/[name].manifest.json') //保存第三方模块的映射关系
+        })
+    ]
+}
+```
+
+在package.json文件scripts中新增命令`"build:dll": "webpack --config ./build/webpack.dll.js",`
+
+安装插件`npm install add-asset-html-webpack-plugin --save`往html-webpack-plugin上再增加打包出的vendor.dll.js。
+
+```
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: 'src/index.html'
+        }),
+        new CleanWebpackPlugin(),
+        new AddAssetHtmlWebpackPlugin({
+            filepath: path.resolve(__dirname, '../dll/vendor.dll.js')
+        }),
+        new webpack.DllReferencePlugin({
+            // 引入的第三方模块时会到manifest.json里找映射关系
+            manifest: path.resolve(__dirname, '../dll/vendor.manifest.json')
+        })
+    ],
+```
+
+现在第三方模块可以一次打包放到wendor.dll.js文件里，再使用这些模块的时候，从dll文件引入而不是node_modules。webpack做打包的时候通过manifest.json文件对源代码分析，如果引入的模块在dll.js中存在就会直接引入，而不去node_modules中寻找了。
+
+
+
+
+

@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const AddAssetHtmlWebpackPlugin = require('add-assset-html-webpack-plugin');
 const webpack = require('webpack')
 
 module.exports = {
@@ -64,6 +65,13 @@ module.exports = {
             _: 'lodash',
             _join: ['lodash', 'join'] // 使用_join即为 _.join
         }),
+        new AddAssetHtmlWebpackPlugin({
+            filepath: path.resolve(__dirname, '../dll/vendor.dll.js')
+        }),
+        new webpack.DllReferencePlugin({
+            // 引入的第三方模块时会到manifest.json里找映射关系
+            manifest: path.resolve(__dirname, '../dll/vendor.manifest.json')
+        })
     ],
     optimization: {
         runtimeChunk: {

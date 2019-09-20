@@ -1242,7 +1242,5 @@ module.exports = {
 
 现在第三方模块可以一次打包放到wendor.dll.js文件里，再使用这些模块的时候，从dll文件引入而不是node_modules。webpack做打包的时候通过manifest.json文件对源代码分析，如果引入的模块在dll.js中存在就会直接引入，而不去node_modules中寻找了。
 
-
-
-
+### 5，多页面打包配置
 

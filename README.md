@@ -1242,5 +1242,13 @@ module.exports = {
 
 现在第三方模块可以一次打包放到wendor.dll.js文件里，再使用这些模块的时候，从dll文件引入而不是node_modules。webpack做打包的时候通过manifest.json文件对源代码分析，如果引入的模块在dll.js中存在就会直接引入，而不去node_modules中寻找了。
 
+##### 5，使用thread-loader,parallel-webpack,happypack多进程打包
+
+webpack默认是通过node.js运行的，打包过程是单进程的。[thread-loader](https://webpack.docschina.org/loaders/thread-loader/),[配置]([https://medium.com/@shinychang/webpack-%E6%9C%80%E4%BD%B3%E5%8C%96-thread-loader-bd18471ffb4c](https://medium.com/@shinychang/webpack-最佳化-thread-loader-bd18471ffb4c));[happypack](https://www.npmjs.com/package/happypack), [ 原理解析](https://link.juejin.im/?target=http%3A%2F%2Ftaobaofed.org%2Fblog%2F2016%2F12%2F08%2Fhappypack-source-code-analysis%2F)可以借助node的多进程帮助打包，利用多个CPU，打包速度会提升很多。在做多页应用打包的时候，可以使用parallel-webpack对多个页面一起进行打包。
+
+注意：thread-loader 和 happypack 对于小型项目来说打包速度几乎没有影响，是因为它本身的额外开销，例如I/O，**建议只在大型项目中使用**，可以先测试再投入生产环境。
+
 ### 5，多页面打包配置
+
+
 

@@ -1248,7 +1248,35 @@ webpack默认是通过node.js运行的，打包过程是单进程的。[thread-l
 
 注意：thread-loader 和 happypack 对于小型项目来说打包速度几乎没有影响，是因为它本身的额外开销，例如I/O，**建议只在大型项目中使用**，可以先测试再投入生产环境。
 
+6, 合理使用sourceMap
+
+soureMap越详细，打包速度越慢，应该合理配置。
+
 ### 5，多页面打包配置
 
+1，entry里添加入口文件
 
+```
+entry: {
+	main: './src/index.js',
+	sub: './src/sub.js'
+}
+```
+
+2, plugins里使用HtmlWebpackPlugin生成多个html文件,使用filename定义不同的文件名，使用chunks来指定要引入哪些文件
+
+```
+plugins: [
+  new HtmlWebpackPlugin({
+      template: 'src/index.html',
+      filename: 'index.html'，
+      chunks: ['runtime', 'vendors', 'index']
+	}),
+	new HtmlWebpackPlugin({
+      template: 'src/index.html',
+      filename: 'sub.html',
+      chunks: ['runtime', 'vendors', 'sub']
+	}),
+]
+```
 

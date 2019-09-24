@@ -5,8 +5,10 @@ const path = require('path');
 const paths = require('./paths');
 
 // Make sure that including paths.js after env.js will read .env variables.
+// 清除require.cache里面的缓存，使得能拿到paths文件里最新的内容
 delete require.cache[require.resolve('./paths')];
 
+// 判断是否设置了环境变量，如果没有代码不会执行
 const NODE_ENV = process.env.NODE_ENV;
 if (!NODE_ENV) {
   throw new Error(

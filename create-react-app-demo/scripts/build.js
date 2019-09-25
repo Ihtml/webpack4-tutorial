@@ -14,7 +14,7 @@ process.on('unhandledRejection', err => {
 });
 
 // Ensure environment variables are read.
-require('../config/env');
+require('../config/env'); // 执行env.js中的getClientEnvironment函数，对全局变量赋值，确保可读
 
 
 const path = require('path');
@@ -46,6 +46,7 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 }
 
 // Generate configuration
+// 得到打包所需要的webpack的配置内容--------------------------
 const config = configFactory('production');
 
 // We require that you explicitly set browsers and do not fall back to

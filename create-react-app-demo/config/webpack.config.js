@@ -53,6 +53,7 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
 module.exports = function(webpackEnv) {
+  // 判断webpack所处的环境
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
@@ -135,12 +136,12 @@ module.exports = function(webpackEnv) {
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     // Stop compilation early in production
-    bail: isEnvProduction,
+    bail: isEnvProduction,  // 线上环境一旦打包遇到错误就停止
     devtool: isEnvProduction
-      ? shouldUseSourceMap
+      ? shouldUseSourceMap  // 根据process.env环境变量中是否配置了GENERATE_SOURCEMAP判断是否使用sourceMap,如果不想用，在build.js中设置process.env.GENERATE_SOURCEMAP = false;
         ? 'source-map'
         : false
-      : isEnvDevelopment && 'cheap-module-source-map',
+      : isEnvDevelopment && 'cheap-module-source-map', // 开发环境使用cheap-module-source-map
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: [
@@ -155,22 +156,23 @@ module.exports = function(webpackEnv) {
       // require.resolve('webpack-dev-server/client') + '?/',
       // require.resolve('webpack/hot/dev-server'),
       isEnvDevelopment &&
-        require.resolve('react-dev-utils/webpackHotDevClient'),
+        require.resolve('react-dev-utils/webpackHotDevClient'), // 解决模块热更新可能存在的问题
       // Finally, this is your app's code:
-      paths.appIndexJs,
+      // paths.js里面的src/index.js
+      paths.appIndexJs, 
       // We include the app code last so that if there is a runtime error during
       // initialization, it doesn't blow up the WebpackDevServer client, and
       // changing JS code would still trigger a refresh.
     ].filter(Boolean),
     output: {
       // The build folder.
-      path: isEnvProduction ? paths.appBuild : undefined,
+      path: isEnvProduction ? paths.appBuild : undefined,  // paths.js中定义了appBuild指向build目录
       // Add /* filename */ comments to generated require()s in the output.
-      pathinfo: isEnvDevelopment,
+      pathinfo: isEnvDevelopment, // 入口引入其他模块的信息通过注释输出
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
       filename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].js'
+        ? 'static/js/[name].[contenthash:8].js'  // 线上环境使用contenthash
         : isEnvDevelopment && 'static/js/bundle.js',
       // TODO: remove this when upgrading to webpack 5
       futureEmitAssets: true,

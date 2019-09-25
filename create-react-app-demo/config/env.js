@@ -17,6 +17,7 @@ if (!NODE_ENV) {
 }
 
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
+// webpack可以配置很多环境变量，可以在根目录下创建.env文件，并定义全局变量，下面代码会到该文件中读取全局变量，并定义到打包过程中
 const dotenvFiles = [
   `${paths.dotenv}.${NODE_ENV}.local`,
   `${paths.dotenv}.${NODE_ENV}`,
@@ -32,6 +33,7 @@ const dotenvFiles = [
 // that have already been set.  Variable expansion is supported in .env files.
 // https://github.com/motdotla/dotenv
 // https://github.com/motdotla/dotenv-expand
+// 结合上面代码，读文件里的全局变量，再定义全局变量
 dotenvFiles.forEach(dotenvFile => {
   if (fs.existsSync(dotenvFile)) {
     require('dotenv-expand')(
@@ -51,12 +53,12 @@ dotenvFiles.forEach(dotenvFile => {
 // Otherwise, we risk importing Node.js core modules into an app instead of Webpack shims.
 // https://github.com/facebook/create-react-app/issues/1023#issuecomment-265344421
 // We also resolve them to make sure all tools using them work consistently.
-const appDirectory = fs.realpathSync(process.cwd());
-process.env.NODE_PATH = (process.env.NODE_PATH || '')
-  .split(path.delimiter)
-  .filter(folder => folder && !path.isAbsolute(folder))
+const appDirectory = fs.realpathSync(process.cwd());  // 获取当前目录的路径
+process.env.NODE_PATH = (process.env.NODE_PATH || '')  // 定义到NODE_PATH里面去
+  .split(path.delimiter) // 提供平台特定的路径定界符
+  .filter(folder => folder && !path.isAbsolute(folder)) // 检测 folder 是否为绝对路径
   .map(folder => path.resolve(appDirectory, folder))
-  .join(path.delimiter);
+  .join(path.delimiter); // NODE_PATH存放当前项目所在路径
 
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.

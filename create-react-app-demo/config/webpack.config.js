@@ -184,7 +184,8 @@ module.exports = function(webpackEnv) {
       // We use "/" in development.
       publicPath: publicPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
-      devtoolModuleFilenameTemplate: isEnvProduction
+      // 通过sourceMap找到依赖文件所在的真正的硬盘位置和代码行数，帮助调错的。
+      devtoolModuleFilenameTemplate: isEnvProduction 
         ? info =>
             path
               .relative(paths.appSrc, info.absoluteResourcePath)
@@ -195,11 +196,12 @@ module.exports = function(webpackEnv) {
       // are used on the same page.
       jsonpFunction: `webpackJsonp${appPackageJson.name}`,
     },
+    // 优化项 
     optimization: {
-      minimize: isEnvProduction,
+      minimize: isEnvProduction,  // 生产环境代码压缩
       minimizer: [
         // This is only used in production mode
-        new TerserPlugin({
+        new TerserPlugin({  // 压缩JS的插件
           terserOptions: {
             parse: {
               // We want terser to parse ecma 8 code. However, we don't want it
@@ -241,7 +243,7 @@ module.exports = function(webpackEnv) {
           parallel: !isWsl,
           // Enable file caching
           cache: true,
-          sourceMap: shouldUseSourceMap,
+          sourceMap: shouldUseSourceMap, // 这里配置生产环境是否使用sourceMap
         }),
         // This is only used in production mode
         new OptimizeCSSAssetsPlugin({
@@ -263,7 +265,7 @@ module.exports = function(webpackEnv) {
       // Automatically split vendor and commons
       // https://twitter.com/wSokra/status/969633336732905474
       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
-      splitChunks: {
+      splitChunks: {  // 代码分割，使用webpack默认配置
         chunks: 'all',
         name: false,
       },

@@ -47,6 +47,7 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 
 // Generate configuration
 // 得到打包所需要的webpack的配置内容--------------------------
+// configFactory就是config/webpack.config文件
 const config = configFactory('production');
 
 // We require that you explicitly set browsers and do not fall back to

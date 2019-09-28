@@ -1,5 +1,5 @@
 'use strict';
-
+// 初始化项目运行环境
 const fs = require('fs');
 const path = require('path');
 const paths = require('./paths');
@@ -64,7 +64,7 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')  // 定义到NODE_PATH里�
 // injected into the application via DefinePlugin in Webpack configuration.
 const REACT_APP = /^REACT_APP_/i;
 
-function getClientEnvironment(publicUrl) {
+function getClientEnvironment(publicUrl) { // 结合外部传进来的路径publicUrl，对全局变量做整理，然后返回出去
   const raw = Object.keys(process.env)
     .filter(key => REACT_APP.test(key))
     .reduce(

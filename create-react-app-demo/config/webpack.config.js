@@ -77,6 +77,7 @@ module.exports = function(webpackEnv) {
   const env = getClientEnvironment(publicUrl);
 
   // common function to get style loaders
+  // 如果是开发换机就用style-loader,生产环境就用MiniCssExtractPlugin
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),
@@ -281,6 +282,7 @@ module.exports = function(webpackEnv) {
       // We placed these paths second because we want `node_modules` to "win"
       // if there are any conflicts. This matches Node resolution mechanism.
       // https://github.com/facebook/create-react-app/issues/253
+      // 引入模块的时候先到node_modules中去找，再到其他modules中去找
       modules: ['node_modules', paths.appNodeModules].concat(
         modules.additionalModulePaths || []
       ),
@@ -290,6 +292,7 @@ module.exports = function(webpackEnv) {
       // https://github.com/facebook/create-react-app/issues/290
       // `web` extension prefixes have been added for better support
       // for React Native Web.
+      // 找模块的后缀对应的文件在不在，在就直接引入
       extensions: paths.moduleFileExtensions
         .map(ext => `.${ext}`)
         .filter(ext => useTypeScript || !ext.includes('ts')),
@@ -298,6 +301,7 @@ module.exports = function(webpackEnv) {
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
       },
+      // 引入其他模块的时候下面的plugins生效
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding
         // guards against forgotten dependencies and such.
@@ -310,7 +314,7 @@ module.exports = function(webpackEnv) {
         new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
       ],
     },
-    resolveLoader: {
+    resolveLoader: { // 引入loader时该plugin会执行
       plugins: [
         // Also related to Plug'n'Play, but this time it tells Webpack to load its loaders
         // from the current package.
@@ -318,16 +322,18 @@ module.exports = function(webpackEnv) {
       ],
     },
     module: {
-      strictExportPresence: true,
+      // 引入的模块必须有明确的导出内容
+      strictExportPresence: true, 
       rules: [
         // Disable require.ensure as it's not a standard language feature.
+        // 不允许使用requireEnsure了，必须使用import()
         { parser: { requireEnsure: false } },
 
         // First, run the linter.
         // It's important to do this before Babel processes the JS.
         {
           test: /\.(js|mjs|jsx|ts|tsx)$/,
-          enforce: 'pre',
+          enforce: 'pre', // loader处理前，先对代码做eslint检查
           use: [
             {
               options: {
@@ -346,6 +352,7 @@ module.exports = function(webpackEnv) {
           // "oneOf" will traverse all following loaders until one will
           // match the requirements. When no loader matches it will fall
           // back to the "file" loader at the end of the loader list.
+          // 打包文件的时候逐个向下找loader，直到找到为止
           oneOf: [
             // "url" loader works like "file" loader except that it embeds assets
             // smaller than specified limit in bytes as data URLs to avoid requests.
@@ -536,7 +543,7 @@ module.exports = function(webpackEnv) {
       // https://github.com/facebook/create-react-app/issues/5358
       isEnvProduction &&
         shouldInlineRuntimeChunk &&
-        new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
+        new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]), //把runtime通过行内的形式嵌入到HTML
       // Makes some environment variables available in index.html.
       // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -558,7 +565,7 @@ module.exports = function(webpackEnv) {
       // Watcher doesn't work well if you mistype casing in a path so we use
       // a plugin that prints an error when you attempt to do this.
       // See https://github.com/facebook/create-react-app/issues/240
-      isEnvDevelopment && new CaseSensitivePathsPlugin(),
+      isEnvDevelopment && new CaseSensitivePathsPlugin(), // 开发环境即使大小写拼错也能正常引入模块
       // If you require a missing module and then `npm install` it, you still have
       // to restart the development server for Webpack to discover it. This plugin
       // makes the discovery automatic so you don't have to restart.
@@ -598,7 +605,7 @@ module.exports = function(webpackEnv) {
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the Webpack build.
       isEnvProduction &&
-        new WorkboxWebpackPlugin.GenerateSW({
+        new WorkboxWebpackPlugin.GenerateSW({  // PWA配置
           clientsClaim: true,
           exclude: [/\.map$/, /asset-manifest\.json$/],
           importWorkboxFrom: 'cdn',

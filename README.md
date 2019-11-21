@@ -912,7 +912,7 @@ async function getJquery() {
 }
 ```
 
-### 5，[打包分析]([https://webpack.docschina.org/guides/code-splitting/#bundle-%E5%88%86%E6%9E%90-bundle-analysis-](https://webpack.docschina.org/guides/code-splitting/#bundle-分析-bundle-analysis-))
+### [5，打包分析](https://webpack.docschina.org/guides/code-splitting/#bundle-分析-bundle-analysis-)
 
 如果想要对打包的代码进行一定的分析。
 
@@ -962,7 +962,7 @@ document.addEventListener('click', () => {
 - preload chunk 会在父 chunk 中立即请求，用于当下时刻。prefetch chunk 会用于未来的某个时刻。
 - 浏览器支持程度不同。
 
-### 7，[CSS代码分割 MiniCssExtractPlugin](https://webpack.docschina.org/plugins/mini-css-extract-plugin/)及[代码压缩](https://github.com/NMFR/optimize-css-assets-webpack-plugin)
+### 7，CSS代码分割及代码压缩
 
 #### CSS代码分割
 

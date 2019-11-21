@@ -116,7 +116,7 @@ webpack默认只知道打包js模块，对于非js结尾的样式文件、图片
 
 打包样式文件的时候一般用到不止一个loader，use里就不使用对象了，而是数组。
 
-```
+```js
         {
             test: /\.css$/,
             use: ['style-loader', 'css-loader']
@@ -129,7 +129,7 @@ webpack默认只知道打包js模块，对于非js结尾的样式文件、图片
 
 如果要使用**Less、Scss、Stylus**编写样式,需要再添加对应的loader。比如'sass-loader',将 Sass 编译成 CSS，默认使用 Node Sass.   安装` npm install sass-loader node-sass --save-dev`
 
-```
+```js
         {
             test: /\.scss$/,
             use: [
@@ -148,7 +148,7 @@ webpack的配置里，loader的执行是由先后顺序的：**从下到上，�
 
 需要我们创建一个postcss.config.js文件，在这个文件里做配置。
 
-```
+```js
 module.exports = {
     plugins: [
         require('autoprefixer')
@@ -158,7 +158,7 @@ module.exports = {
 
 css-loader配置
 
-```
+```js
         {
             test: /\.scss$/,
             use: [
@@ -183,8 +183,8 @@ css-loader配置
 
 只需要在css-loader里再加一项配置：modules：true
 
-```
-								{
+```js
+                {
                     loader: 'css-loader',
                     options: {
                         importLoaders: 2,
@@ -199,7 +199,7 @@ css-loader配置
 
 当使用iconfont的时候，需要打包几个字体文件(eot,svg,ttf,woff)
 
-```
+```js
         {
             test: '/\.(eot|ttf|svg)$/',
             use: {
@@ -270,7 +270,7 @@ module.exports = {
 
 在plugins数组里添加
 
-```
+```js
 new CleanWebpackPlugin({
 		cleanAfterEveryBuildPatterns: ['dist']
 })
@@ -282,7 +282,7 @@ new CleanWebpackPlugin({
 
 两个入口打包出两个文件,publicPath用于把打包出的js文件加上地址.
 
-```
+```js
     entry: {
         main: './src/index.js',
         sub: './src/index.js'
@@ -316,7 +316,7 @@ new CleanWebpackPlugin({
 
    只需要添加以下配置,然后在scripts里添加配置`"start": "webpack-dev-server"`
 
-   ```
+   ```js
    devServer: {
    	contentBase: './dist'，
    	open: true,
@@ -370,7 +370,7 @@ Webpack-dev-server会把打包的目录放到电脑内存里，这样打包更�
 
 首先，在dev-server的配置中，增加`hot: true`
 
-```
+```js
     devServer: {
         contentBase: './dist',
         open: true,
@@ -391,7 +391,7 @@ Webpack-dev-server会把打包的目录放到电脑内存里，这样打包更�
 
 如果只改了js文件一个模块的内容，同样可以不影响其他模块。
 
-```
+```js
 if (module.hot) {
     module.hot.accept('./content', () => {
         // 如果只是改了content模块的内容，就只让content重新执行
@@ -419,7 +419,7 @@ Vue-loader,react的babel-preset都内置了HMR这样功能的实现。
 
 再在module里添加配置：
 
-```
+```js
 module: {
   rules: [
             {   
@@ -442,7 +442,7 @@ module: {
 
 1, 指定兼容到浏览器版本
 
-```
+```js
       targets: {
         edge: "17",
         firefox: "60",
@@ -459,7 +459,7 @@ module: {
 
 在options里添加插件
 
-```
+```js
 "plugins": [
     [
       "@babel/plugin-transform-runtime",
@@ -476,7 +476,7 @@ module: {
 
 3，使用.babelrc配置文件，把options里的内容提取到一个单独的文件内
 
-```
+```js
 {
     "presets": [["@babel/preset-env", {
         targets: {
@@ -496,7 +496,7 @@ module: {
 
 在babelrc文件下添加
 
-```
+```js
 "plugins": ["dynamic-import-webpack"]
 ```
 
@@ -510,7 +510,7 @@ react的jsx语法需要编译打包成js才能被浏览器识别
 
 在.babelrc里配置
 
-```
+```js
 {
     "presets": [
         ["@babel/preset-env", {
@@ -633,7 +633,7 @@ module.exports = {
 
 在module.exports里添加配置：
 
-```
+```js
     optimization: {
         // 只打包那些被使用的模块
         usedExports: true
@@ -654,7 +654,7 @@ Producttion-线上环境：代码压缩，sourceMap可以简洁
 
 在package.json里添加命令：
 
-```
+```js
 "dev": "webpack-dev-server --config webpack.dev.js",
 "build": "webpack-dev-server --config webpack.prod.js",
 ```
@@ -796,7 +796,7 @@ module.exports = merge(commonConfig, prodConfig)
 
 webpack4提供了代码分割的插件，只需要添加以下配置，会自动把公用的类库生成一个文件，再把业务逻辑拆分成一个文件。
 
-```
+```js
     optimization: {
         splitChunks: {
             chunks: 'all'
@@ -810,7 +810,7 @@ webpack4提供了代码分割的插件，只需要添加以下配置，会自动
 
 在.babelrc文件里添加配置
 
-```
+```js
 {
   "plugins": ["@babel/plugin-syntax-dynamic-import"]
 }
@@ -818,7 +818,7 @@ webpack4提供了代码分割的插件，只需要添加以下配置，会自动
 
 使用：以下配置会将异步加载的jquery库打包生成vendors~jquery.js文件, es2015规格中的`import()`本身是不支持指定动态导入模块生成的chunk文件的名称的，不过，现在webpack支持使用**注释**的方式给动态导入的模块添加`chunk name`。
 
-```
+```js
 function getJquery() {
     return import(/* webpackChunkName:"jquery" */ 'jquery').then(({ default: $}) => {
         // 引入的jQuery库会被放到$变量里
@@ -829,7 +829,7 @@ function getJquery() {
 
 [SplitChunksPlugin](https://webpack.docschina.org/plugins/split-chunks-plugin/)配置参数
 
-```
+```js
 optimization: {
     splitChunks: {
       cacheGroups: {
@@ -842,7 +842,7 @@ optimization: {
 
 当splitChunks: {}不配置的时候，会使用下面的默认配置：
 
-```
+```js
 splitChunks: {
       chunks: 'async',
       minSize: 30000,
@@ -928,7 +928,7 @@ async function getJquery() {
 
 提高性能的方式：尽量把以后才会用到的代码通过异步加载的方式引入，提升首屏。比如首页有登录框，点击登录的时候才显示，那么就可以把登录框的代码写成异步地形式，等页面主要的内容加载完后，空闲时再加载登录框。
 
-```
+```js
 document.addEventListener('click', () => {
     import('./loginBox.js').then(({default: func}) => {
         func()
@@ -945,7 +945,7 @@ webpack v4.6.0+ 添加了预取和预加载的支持。
 - prefetch(预取)：将来某些导航下可能需要的资源
 - preload(预加载)：当前导航下可能需要资源
 
-```
+```js
 document.addEventListener('click', () => {
     import(/* webpackPrefetch: true */ './loginBox.js').then(({default: func}) => {
         func()
@@ -984,7 +984,7 @@ webpack打包会把css打包到js文件里，如果想把css单独打包成文�
 
 现在配置文件如下：
 
-```
+```js
 const TerserJSPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
@@ -1041,7 +1041,7 @@ module.exports = merge(commonConfig, prodConfig)
 
 可以在线上环境的打包代码webpack.prod.js中增加如下配置：
 
-```
+```js
         output: {
             filename: '[name].[contenthash].js', // 入口文件名
             chunkFilename: '[name].[contenthash].chunk.js', // 间接引用的模块
@@ -1052,7 +1052,7 @@ module.exports = merge(commonConfig, prodConfig)
 
 如果使用老版本的webpack，发现代码没做修改也生成不同hash,可以在optimization里添加下面配置：
 
-```
+```js
     optimization: {
         runtimeChunk: {
             name: 'runtime'
@@ -1074,7 +1074,7 @@ webpack是模块化打包，模块里的变量只能在一个模块内被使用�
 
 在webpack.common.js的插件中，可以添加如下配置：[ProvidePlugin](https://webpack.docschina.org/plugins/provide-plugin/)
 
-```
+```js
     plugins: [
         new webpack.ProvidePlugin({
             $: 'jquery'
@@ -1104,7 +1104,7 @@ webpack是模块化打包，模块里的变量只能在一个模块内被使用�
 
 配置：
 
-```
+```js
     devServer: {
         contentBase: './dist',
         open: true,
@@ -1138,7 +1138,7 @@ webpack是模块化打包，模块里的变量只能在一个模块内被使用�
 
 再在webpack的配置文件中添加配置：
 
-```
+```js
 			{
             test: /\.js$/,
             exclude: /node_modules/,
@@ -1152,7 +1152,7 @@ webpack是模块化打包，模块里的变量只能在一个模块内被使用�
 
 可选项：
 
-```
+```js
 module.exports = {
   // ...
   module: {
@@ -1197,7 +1197,7 @@ webpack每个版本更新，内部都会做优化，升级webpack版本能有效
 
 新增一个webpack.dll.js文件,添加如下内容
 
-```
+```js
 const path = require('path');
 const webpack = require('webpack')
 
@@ -1224,7 +1224,7 @@ module.exports = {
 
 安装插件`npm install add-asset-html-webpack-plugin --save`往html-webpack-plugin上再增加打包出的vendor.dll.js。
 
-```
+```js
     plugins: [
         new HtmlWebpackPlugin({
             template: 'src/index.html'
@@ -1256,7 +1256,7 @@ soureMap越详细，打包速度越慢，应该合理配置。
 
 1，entry里添加入口文件
 
-```
+```js
 entry: {
 	main: './src/index.js',
 	sub: './src/sub.js'
@@ -1265,7 +1265,7 @@ entry: {
 
 2, plugins里使用HtmlWebpackPlugin生成多个html文件,使用filename定义不同的文件名，使用chunks来指定要引入哪些文件
 
-```
+```js
 plugins: [
   new HtmlWebpackPlugin({
       template: 'src/index.html',
